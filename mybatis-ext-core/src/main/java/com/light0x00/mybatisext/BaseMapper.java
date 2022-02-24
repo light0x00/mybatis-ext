@@ -2,7 +2,7 @@ package com.light0x00.mybatisext;
 
 import com.light0x00.mybatisext.sql.InsertCondition;
 import com.light0x00.mybatisext.sql.UpdateCondition;
-import com.light0x00.mybatisext.sql.WhereCondition;
+import com.light0x00.mybatisext.sql.WhereClause;
 import org.apache.ibatis.annotations.DeleteProvider;
 import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.SelectProvider;
@@ -37,34 +37,34 @@ public interface BaseMapper<T> {
     int deleteById(Serializable id);
 
     @UpdateProvider(type = BaseMapperSqlSourceProvider.class, method = "delete")
-    int delete(WhereCondition condition);
+    int delete(WhereClause condition);
 
     @UpdateProvider(type = BaseMapperSqlSourceProvider.class, method = "updateById")
     int updateById(T entity);
 
     @UpdateProvider(type = BaseMapperSqlSourceProvider.class, method = "update")
-    int update(T entity, WhereCondition condition);
+    int update(T entity, WhereClause condition);
 
     /**
      * @param condition The condition to build the sql.It must be specified as type of {@link UpdateCondition}.
      */
     @UpdateProvider(type = BaseMapperSqlSourceProvider.class, method = "updateByCondition")
-    int updateByCondition(WhereCondition condition);
+    int updateByCondition(WhereClause condition);
 
     @SelectProvider(type = BaseMapperSqlSourceProvider.class, method = "getById")
     T getById(Serializable id);
 
     @SelectProvider(type = BaseMapperSqlSourceProvider.class, method = "select")
-    List<T> select(WhereCondition condition);
+    List<T> select(WhereClause condition);
 
     @SelectProvider(type = BaseMapperSqlSourceProvider.class, method = "selectOne")
-    T selectOne(WhereCondition condition);
+    T selectOne(WhereClause condition);
 
     @SelectProvider(type = BaseMapperSqlSourceProvider.class, method = "selectCount")
-    List<T> selectCount(WhereCondition condition);
+    List<T> selectCount(WhereClause condition);
 
     @SelectProvider(type = BaseMapperSqlSourceProvider.class, method = "selectCursor")
-    Cursor<T> selectCursor(WhereCondition condition);
+    Cursor<T> selectCursor(WhereClause condition);
 
 //    @SelectProvider(type = BaseMapperSqlSourceProvider.class, method = "selectPage")
 //    List<T> selectPage(WhereCondition where);

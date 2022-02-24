@@ -15,11 +15,11 @@ public class MyBatisScripts {
         return "<script> " + source + " </script>";
     }
 
-    public static String hashExp(String exp) {
+    public static String hashExpr(String exp) {
         return "#{" + exp + "}";
     }
 
-    public static String dollarExp(String exp) {
+    public static String dollarExpr(String exp) {
         return "${" + exp + "}";
     }
 

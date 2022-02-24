@@ -12,14 +12,14 @@ import static com.light0x00.mybatisext.sql.set.SetAst.*;
  * @author light
  * @since 2022/2/21
  */
-public class UpdateCondition extends WhereCondition {
+public class UpdateCondition extends WhereClause {
 
     List<ASTNode> setItems = new LinkedList<>();
 
     @Getter
     private Set setAstRoot;
 
-    public WhereCondition where() {
+    public WhereClause where() {
         return this;
     }
 

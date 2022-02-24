@@ -58,7 +58,7 @@ public class SetAst {
 
         @Override
         public String eval() {
-            return column + "=" + MyBatisScripts.hashExp(accessSymbol + ".value");
+            return column + "=" + MyBatisScripts.hashExpr(accessSymbol + ".value");
         }
     }
 
@@ -69,7 +69,7 @@ public class SetAst {
 
         @Override
         public String eval() {
-            return column + "=" + column + "+" + MyBatisScripts.hashExp(accessSymbol + ".value");
+            return column + "=" + column + "+" + MyBatisScripts.hashExpr(accessSymbol + ".value");
         }
     }
 
@@ -80,7 +80,7 @@ public class SetAst {
 
         @Override
         public String eval() {
-            return column + "=" + column + "-" + MyBatisScripts.hashExp(accessSymbol + ".value");
+            return column + "=" + column + "-" + MyBatisScripts.hashExpr(accessSymbol + ".value");
         }
     }
 }

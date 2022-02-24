@@ -47,7 +47,7 @@ public class InsertCondition {
     public String getSqlValues(String accessSymbol) {
         String valuesAccessSymbol = StringUtils.combineWithExactlyOneDot(accessSymbol, "values");
         return IntStream.range(0, this.values.size())
-                .mapToObj(i -> MyBatisScripts.hashExp(valuesAccessSymbol + "[" + i + "]"))
+                .mapToObj(i -> MyBatisScripts.hashExpr(valuesAccessSymbol + "[" + i + "]"))
                 .collect(Collectors.joining(","));
     }
 

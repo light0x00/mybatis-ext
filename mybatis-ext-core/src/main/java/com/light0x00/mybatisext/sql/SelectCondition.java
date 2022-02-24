@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
  * @author light
  * @since 2022/2/21
  */
-public class SelectCondition extends WhereCondition {
+public class SelectCondition extends WhereClause {
 
     private List<String> columns;
 
@@ -19,11 +19,11 @@ public class SelectCondition extends WhereCondition {
         return this;
     }
 
-    public WhereCondition where() {
+    public WhereClause where() {
         return this;
     }
 
-    public SelectCondition where(Consumer<WhereCondition> whereConditionConsumer) {
+    public SelectCondition where(Consumer<WhereClause> whereConditionConsumer) {
         whereConditionConsumer.accept(this);
         return this;
     }

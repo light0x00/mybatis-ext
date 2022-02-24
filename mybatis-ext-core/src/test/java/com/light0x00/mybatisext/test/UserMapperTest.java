@@ -3,7 +3,7 @@ package com.light0x00.mybatisext.test;
 import com.light0x00.mybatisext.sql.InsertCondition;
 import com.light0x00.mybatisext.sql.SelectCondition;
 import com.light0x00.mybatisext.sql.UpdateCondition;
-import com.light0x00.mybatisext.sql.WhereCondition;
+import com.light0x00.mybatisext.sql.WhereClause;
 import org.apache.ibatis.cursor.Cursor;
 import org.apache.ibatis.datasource.unpooled.UnpooledDataSource;
 import org.apache.ibatis.mapping.Environment;
@@ -81,7 +81,7 @@ public class UserMapperTest {
 
     @Test
     public void delete() {
-        userMapper.delete(new WhereCondition().eq("name", "jack"));
+        userMapper.delete(new WhereClause().eq("name", "jack"));
     }
 
     @Test
@@ -98,7 +98,7 @@ public class UserMapperTest {
         User user = new User();
         user.setEmail("light@163.com");
         user.setAge(20);
-        userMapper.update(user, new WhereCondition().eq("pk_id", 2));
+        userMapper.update(user, new WhereClause().eq("pk_id", 2));
     }
 
     @Test
@@ -142,7 +142,7 @@ public class UserMapperTest {
 
     @Test
     public void selectCursor() {
-        try (Cursor<User> cursor = userMapper.selectCursor(new WhereCondition().ne("pk_id", 1))) {
+        try (Cursor<User> cursor = userMapper.selectCursor(new WhereClause().ne("pk_id", 1))) {
             cursor.forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();
@@ -151,7 +151,7 @@ public class UserMapperTest {
 
     @Test
     public void selectStreaming() {
-        userMapper.selectStreaming(new WhereCondition().ne("pk_id", 1), new ResultHandler<User>() {
+        userMapper.selectStreaming(new WhereClause().ne("pk_id", 1), new ResultHandler<User>() {
             @Override
             public void handleResult(ResultContext<? extends User> resultContext) {
                 System.out.println(resultContext.getResultObject());
