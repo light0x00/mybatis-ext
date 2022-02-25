@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author light
  * @since 2022/2/19
  */
-public class TableInfoHolder {
+class TableInfoHolder {
 
     private static Map<Class<?>, TableInfo> mapperToTableInfoCache = new ConcurrentHashMap<>();
 

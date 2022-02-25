@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  * @author light
  * @since 2022/2/24
  */
-public class ConditionBuilder<R extends ConditionBuilder<R>> {
+class ConditionBuilder<R extends ConditionBuilder<R>> {
 
     @Getter
     protected Condition conditionAst;

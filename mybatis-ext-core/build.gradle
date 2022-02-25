@@ -9,10 +9,11 @@ repositories {
 }
 
 dependencies {
-    api 'org.mybatis:mybatis:3.5.9'
+    implementation 'org.mybatis:mybatis:3.5.9'
     implementation 'ch.qos.logback:logback-core:1.2.6'
     implementation 'ch.qos.logback:logback-classic:1.2.6'
     implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'org.jetbrains:annotations:23.0.0'
 
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
@@ -23,8 +24,6 @@ dependencies {
     testImplementation 'com.h2database:h2:1.4.200'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-
-    implementation 'org.jetbrains:annotations:23.0.0'
 }
 
 test {
