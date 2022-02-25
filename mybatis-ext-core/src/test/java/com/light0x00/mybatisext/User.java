@@ -1,4 +1,4 @@
-package com.light0x00.mybatisext.test;
+package com.light0x00.mybatisext;
 
 import com.light0x00.mybatisext.annotations.Column;
 import com.light0x00.mybatisext.annotations.TableName;

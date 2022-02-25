@@ -1,16 +1,17 @@
-package com.light0x00.mybatisext.test;
+package com.light0x00.mybatisext;
 
+import com.light0x00.mybatisext.sql.DeleteCondition;
 import com.light0x00.mybatisext.sql.InsertCondition;
 import com.light0x00.mybatisext.sql.SelectCondition;
 import com.light0x00.mybatisext.sql.UpdateCondition;
-import com.light0x00.mybatisext.sql.WhereClause;
 import org.apache.ibatis.cursor.Cursor;
 import org.apache.ibatis.datasource.unpooled.UnpooledDataSource;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.*;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
 
@@ -18,6 +19,7 @@ import java.io.IOException;
  * @author light
  * @since 2022/2/16
  */
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserMapperTest {
 
     String url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;" +
@@ -29,7 +31,7 @@ public class UserMapperTest {
     SqlSession sqlSession;
     UserMapper userMapper;
 
-    @BeforeEach
+    @BeforeAll
     public void init() {
         Environment environment = new Environment("development", new JdbcTransactionFactory(), new UnpooledDataSource(
                 "org.h2.Driver", url, "root", "test"));
@@ -81,7 +83,7 @@ public class UserMapperTest {
 
     @Test
     public void delete() {
-        userMapper.delete(new WhereClause().eq("name", "jack"));
+        userMapper.delete(new DeleteCondition().eq("name", "jack"));
     }
 
     @Test
@@ -98,7 +100,7 @@ public class UserMapperTest {
         User user = new User();
         user.setEmail("light@163.com");
         user.setAge(20);
-        userMapper.update(user, new WhereClause().eq("pk_id", 2));
+        userMapper.update(user, new UpdateCondition().eq("pk_id", 2));
     }
 
     @Test
@@ -142,7 +144,7 @@ public class UserMapperTest {
 
     @Test
     public void selectCursor() {
-        try (Cursor<User> cursor = userMapper.selectCursor(new WhereClause().ne("pk_id", 1))) {
+        try (Cursor<User> cursor = userMapper.selectCursor(new SelectCondition().ne("pk_id", 1))) {
             cursor.forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();
@@ -151,7 +153,7 @@ public class UserMapperTest {
 
     @Test
     public void selectStreaming() {
-        userMapper.selectStreaming(new WhereClause().ne("pk_id", 1), new ResultHandler<User>() {
+        userMapper.selectStreaming(new SelectCondition().ne("pk_id", 1), new ResultHandler<User>() {
             @Override
             public void handleResult(ResultContext<? extends User> resultContext) {
                 System.out.println(resultContext.getResultObject());

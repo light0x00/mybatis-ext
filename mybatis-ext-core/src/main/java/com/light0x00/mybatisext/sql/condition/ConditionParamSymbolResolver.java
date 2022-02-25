@@ -141,14 +141,6 @@ public class ConditionParamSymbolResolver extends ConditionAstVisitor<Void> {
         return null;
     }
 
-    @Override
-    public Void visitWhere(Where node) {
-        node.setParamSymbol(stack.pop());
-        stack.push(node.getParamSymbol() + ".condition");
-        visitCondition(node.getCondition());
-        return null;
-    }
-
     private void resolveRange(Range node) {
         node.setParamSymbol(stack.pop() + ".value");
     }

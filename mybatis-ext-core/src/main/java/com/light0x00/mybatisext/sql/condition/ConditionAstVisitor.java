@@ -44,8 +44,6 @@ public abstract class ConditionAstVisitor<T> {
 
     public abstract T visitCondition(Condition root);
 
-    public abstract T visitWhere(Where node);
-
     protected T visitNode(ASTNode node) {
         switch (node.getType()) {
             case EQ:

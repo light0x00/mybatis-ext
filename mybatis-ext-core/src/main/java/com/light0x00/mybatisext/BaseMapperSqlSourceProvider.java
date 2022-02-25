@@ -1,10 +1,9 @@
 package com.light0x00.mybatisext;
 
-import com.light0x00.mybatisext.exceptions.MyBatisExtException;
+import com.light0x00.mybatisext.sql.DeleteCondition;
 import com.light0x00.mybatisext.sql.InsertCondition;
 import com.light0x00.mybatisext.sql.SelectCondition;
 import com.light0x00.mybatisext.sql.UpdateCondition;
-import com.light0x00.mybatisext.sql.WhereClause;
 import com.light0x00.mybatisext.toolkit.MyBatisScripts;
 import org.apache.ibatis.builder.annotation.ProviderContext;
 
@@ -52,7 +51,7 @@ public class BaseMapperSqlSourceProvider {
                 tableInfo.getPrimary().getColumn());
     }
 
-    public static String delete(WhereClause condition, ProviderContext context) {
+    public static String delete(DeleteCondition condition, ProviderContext context) {
         TableInfo tableInfo = TableInfoHolder.get(context.getMapperType());
         return script("delete from %s %s",
                 tableInfo.getFullTableName(),
@@ -68,7 +67,7 @@ public class BaseMapperSqlSourceProvider {
                 tableInfo.getPrimary().getFiledName());
     }
 
-    public static String update(Object entity, WhereClause where, ProviderContext context) {
+    public static String update(Object entity, UpdateCondition where, ProviderContext context) {
         TableInfo tableInfo = TableInfoHolder.get(context.getMapperType());
         return script("update %s %s %s",
                 tableInfo.getFullTableName(),
@@ -76,13 +75,7 @@ public class BaseMapperSqlSourceProvider {
                 where.getSqlWhere("param2"));
     }
 
-    public static String updateByCondition(WhereClause condition2, ProviderContext context) {
-        if (!(condition2 instanceof UpdateCondition)) {
-            throw new MyBatisExtException("To call \"{0}\",the parameter must be specified as type of \"{1}\".",
-                    BaseMapper.class.getName() + ".updateByCondition",
-                    UpdateCondition.class.getName());
-        }
-        UpdateCondition condition = (UpdateCondition) condition2;
+    public static String updateByCondition(UpdateCondition condition, ProviderContext context) {
         TableInfo tableInfo = TableInfoHolder.get(context.getMapperType());
         String tableName = tableInfo.getFullTableName();
         String sqlSet = condition.getSqlSet("");
@@ -97,39 +90,29 @@ public class BaseMapperSqlSourceProvider {
                 tableInfo.getPrimary().getColumn());
     }
 
-    public static String select(WhereClause condition, ProviderContext context) {
-        String sqlColumns = determineSqlColumns(condition);
+    public static String select(SelectCondition condition, ProviderContext context) {
+        String sqlColumns = condition.getSqlColumns();
         String sqlWhere = condition.getSqlWhere("");
         String tableName = TableInfoHolder.get(context.getMapperType()).getFullTableName();
         return script("select %s from %s %s", sqlColumns, tableName, sqlWhere);
     }
 
-    public static String selectOne(WhereClause condition, ProviderContext context) {
+    public static String selectOne(SelectCondition condition, ProviderContext context) {
         return select(condition, context);
     }
 
-    public static String selectCount(WhereClause condition, ProviderContext context) {
+    public static String selectCount(SelectCondition condition, ProviderContext context) {
         String tableName = TableInfoHolder.get(context.getMapperType()).getFullTableName();
         return script("select count(1) from %s %s", tableName, condition.getSqlWhere());
     }
 
 
-    public static String selectCursor(WhereClause condition, ProviderContext context) {
+    public static String selectCursor(SelectCondition condition, ProviderContext context) {
         return select(condition, context);
     }
 
-    public static String selectStreaming(WhereClause condition, ProviderContext context) {
+    public static String selectStreaming(SelectCondition condition, ProviderContext context) {
         return select(condition, context);
-    }
-
-    private static String determineSqlColumns(WhereClause whereCondition) {
-        String sqlColumns;
-        if (whereCondition instanceof SelectCondition) {
-            sqlColumns = ((SelectCondition) whereCondition).getSqlColumns();
-        } else {
-            sqlColumns = "*";
-        }
-        return sqlColumns;
     }
 
     private static String script(String sqlScript, Object... args) {

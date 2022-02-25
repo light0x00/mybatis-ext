@@ -15,15 +15,13 @@ import java.util.function.Consumer;
  * @author light
  * @since 2022/2/24
  */
-public abstract class ConditionBuilder<T extends ConditionBuilder<T>> {
+public class ConditionBuilder<R extends ConditionBuilder<R>> {
 
     @Getter
     protected Condition conditionAst;
     protected LinkedList<ASTNode> conditionNodes = new LinkedList<>();
 
     private ConditionSourceGenerator sqlGenerator = new ConditionSourceGenerator();
-
-    protected abstract T newNestedBuilderInstance();
 
     protected NestedCondition buildNestedCondition() {
         return new NestedCondition(conditionNodes);
@@ -36,128 +34,128 @@ public abstract class ConditionBuilder<T extends ConditionBuilder<T>> {
         return sqlGenerator.visitCondition(conditionAst);
     }
 
-    public T eq(String column, Object value) {
+    public R eq(String column, Object value) {
         appendAndOperator(false);
         conditionNodes.add(new ValueMatch(ASTNodeType.EQ, column, value));
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T ne(String column, Object value) {
+    public R ne(String column, Object value) {
         appendAndOperator(false);
         conditionNodes.add(new ValueMatch(ASTNodeType.NE, column, value));
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T in(String column, Object... value) {
+    public R in(String column, Object... value) {
         return in(column, Arrays.asList(value));
     }
 
-    public T in(String column, List<Object> value) {
+    public R in(String column, List<Object> value) {
         appendAndOperator(false);
         conditionNodes.add(new MultiValueMatch(ASTNodeType.IN, column, value));
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T notIn(String column, Object... value) {
+    public R notIn(String column, Object... value) {
         return notIn(column, Arrays.asList(value));
     }
 
-    public T notIn(String column, List<Object> value) {
+    public R notIn(String column, List<Object> value) {
         appendAndOperator(false);
         conditionNodes.add(new MultiValueMatch(ASTNodeType.NOT_IN, column, value));
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T gt(String column, Object value) {
+    public R gt(String column, Object value) {
         appendAndOperator(false);
         conditionNodes.add(new Range(ASTNodeType.GT, column, value));
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T gte(String column, Object value) {
+    public R gte(String column, Object value) {
         appendAndOperator(false);
         conditionNodes.add(new Range(ASTNodeType.GTE, column, value));
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T lt(String column, Object value) {
+    public R lt(String column, Object value) {
         appendAndOperator(false);
         conditionNodes.add(new Range(ASTNodeType.LT, column, value));
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T lte(String column, Object value) {
+    public R lte(String column, Object value) {
         appendAndOperator(false);
         conditionNodes.add(new Range(ASTNodeType.LTE, column, value));
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T between(String column, Object begin, Object end) {
+    public R between(String column, Object begin, Object end) {
         appendAndOperator(false);
         conditionNodes.add(new BinaryRange(ASTNodeType.BETWEEN, column, begin, end));
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T notBetween(String column, Object begin, Object end) {
+    public R notBetween(String column, Object begin, Object end) {
         appendAndOperator(false);
         conditionNodes.add(new BinaryRange(ASTNodeType.NOT_BETWEEN, column, begin, end));
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T like(String column, Object value) {
+    public R like(String column, Object value) {
         appendAndOperator(false);
         conditionNodes.add(new ValueMatch(ASTNodeType.LIKE, column, value));
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T notLike(String column, Object value) {
+    public R notLike(String column, Object value) {
         appendAndOperator(false);
         conditionNodes.add(new ValueMatch(ASTNodeType.NOT_LIKE, column, value));
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T isNull(String column) {
+    public R isNull(String column) {
         appendAndOperator(false);
         conditionNodes.add(new ValueMatch(ASTNodeType.IS_NULL, column));
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T isNotNull(String column) {
+    public R isNotNull(String column) {
         appendAndOperator(false);
         conditionNodes.add(new ValueMatch(ASTNodeType.IS_NOT_NULL, column));
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T or() {
+    public R or() {
         appendOrOperator(true);
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T and() {
+    public R and() {
         appendAndOperator(true);
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T nested(Consumer<T> nestedConditionConsumer) {
+    public R nested(Consumer<ConditionBuilder<R>> nestedConditionConsumer) {
         appendAndOperator(false);
         nested0(nestedConditionConsumer);
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T orNested(Consumer<T> nestedConditionConsumer) {
+    public R orNested(Consumer<ConditionBuilder<R>> nestedConditionConsumer) {
         or();
         nested0(nestedConditionConsumer);
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    public T andNested(Consumer<T> nestedConditionConsumer) {
+    public R andNested(Consumer<ConditionBuilder<R>> nestedConditionConsumer) {
         and();
         nested0(nestedConditionConsumer);
-        return thisAsSubType();
+        return thisAsR();
     }
 
-    private void nested0(Consumer<T> nestedConditionConsumer) {
-        T nestedBuilder = newNestedBuilderInstance();
+    private void nested0(Consumer<ConditionBuilder<R>> nestedConditionConsumer) {
+        ConditionBuilder<R> nestedBuilder = new ConditionBuilder<>();
         nestedConditionConsumer.accept(nestedBuilder);
         conditionNodes.addLast(nestedBuilder.buildNestedCondition());
     }
@@ -199,8 +197,8 @@ public abstract class ConditionBuilder<T extends ConditionBuilder<T>> {
     }
 
     @SuppressWarnings({"unchecked"})
-    private T thisAsSubType() {
-        return (T) this;
+    protected R thisAsR() {
+        return (R) this;
     }
 
 }

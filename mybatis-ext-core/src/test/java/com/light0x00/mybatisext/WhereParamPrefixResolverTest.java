@@ -1,4 +1,4 @@
-package com.light0x00.mybatisext.test;
+package com.light0x00.mybatisext;
 
 import com.light0x00.mybatisext.sql.condition.ConditionAst.*;
 import com.light0x00.mybatisext.sql.condition.ConditionParamSymbolResolver;

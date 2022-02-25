@@ -5,6 +5,13 @@ import lombok.Setter;
 
 import java.util.List;
 
+/*
+where -> 'where' condition | ε
+condition -> expr |  expr ('and'|'or')  condition | nested_condition
+nested_condition -> '(' condition  ')'
+expr -> eq | neq | in | not in | gt | gte | lt | lte | between | not between | like | not like | is null | is not null
+*/
+
 /**
  * @author light
  * @since 2022/2/21

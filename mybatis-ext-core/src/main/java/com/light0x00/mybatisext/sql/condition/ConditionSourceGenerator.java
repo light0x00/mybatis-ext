@@ -2,7 +2,6 @@ package com.light0x00.mybatisext.sql.condition;
 
 import com.light0x00.mybatisext.sql.condition.ConditionAst.*;
 import com.light0x00.mybatisext.toolkit.MyBatisScripts;
-import com.light0x00.mybatisext.toolkit.StringUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -114,19 +113,6 @@ public class ConditionSourceGenerator extends ConditionAstVisitor<String> {
             sb.append(visitNode(child));
         }
         return "(" + sb + ")";
-    }
-
-    @Override
-    public String visitWhere(Where node) {
-        StringBuilder source = new StringBuilder();
-        if (node.getCondition() != null) {
-            String condition = visitCondition(node.getCondition());
-            if (StringUtils.isNotBlank(condition)) {
-                source.append("where ");
-                source.append(condition);
-            }
-        }
-        return source.toString();
     }
 
     @Override
