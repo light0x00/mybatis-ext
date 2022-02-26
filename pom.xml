@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.light0x00</groupId>
     <artifactId>mybatis-ext-parent</artifactId>
-    <version>${revision}</version>
+    <version>0.0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -14,7 +12,6 @@
     </modules>
 
     <properties>
-        <revision>0.0.1</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -43,9 +40,10 @@
 
     <scm>
         <connection>scm:git:git://github.com/light0x00/mybatis-ext.git</connection>
-        <developerConnection>scm:git:ssh://github.com:light0x00/mybatis-ext.git</developerConnection>
+        <developerConnection>scm:git:https://github.com/light0x00/mybatis-ext.git</developerConnection>
         <url>http://github.com/light0x00/mybatis-ext/tree/master</url>
-    </scm>
+      <tag>mybatis-ext-parent-0.0.3</tag>
+  </scm>
 
     <dependencyManagement>
         <dependencies>
@@ -98,9 +96,30 @@
 
     <profiles>
         <profile>
-            <id>ossrh</id>
+            <id>release</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-release-plugin</artifactId>
+                        <version>2.5.3</version>
+                        <configuration>
+                            <autoVersionSubmodules>true</autoVersionSubmodules>
+                            <useReleaseProfile>false</useReleaseProfile>
+                            <releaseProfiles>release</releaseProfiles>
+                            <goals>deploy</goals>
+                        </configuration>
+                    </plugin>
+                    <!--管理全局版本-->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>versions-maven-plugin</artifactId>
+                        <version>2.8.1</version>
+                        <configuration>
+                            <generateBackupPoms>false</generateBackupPoms>
+                        </configuration>
+                    </plugin>
+                    <!--发布到 central 仓库-->
                     <plugin>
                         <groupId>org.sonatype.plugins</groupId>
                         <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -113,6 +132,7 @@
                         </configuration>
                     </plugin>
 
+                    <!--对构建的 artifact 签名-->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
