@@ -1,3 +1,0 @@
-rootProject.name = 'mybatis-ext'
-include 'mybatis-ext-core'
-
