@@ -13,6 +13,13 @@
         <module>mybatis-ext-core</module>
     </modules>
 
+    <properties>
+        <revision>0.0.1</revision>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
     <name>${project.artifactId}</name>
     <description>An extension library for mybatis, that provides graceful api to simplify CRUD development.
     </description>
@@ -39,13 +46,6 @@
         <developerConnection>scm:git:ssh://github.com:light0x00/mybatis-ext.git</developerConnection>
         <url>http://github.com/light0x00/mybatis-ext/tree/master</url>
     </scm>
-
-    <properties>
-        <revision>0.0.1-SNAPSHOT</revision>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
 
     <dependencyManagement>
         <dependencies>
