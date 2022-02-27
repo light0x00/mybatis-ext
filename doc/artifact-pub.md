@@ -6,14 +6,23 @@
 4. 配置 pom.xml，setting.xml 等
    > 大概是配置发布插件，nexus 服务器认证，签名相关的信息， 参考 https://central.sonatype.org/publish/requirements/#license-information
 5. 执行发布指令（如 mvn deploy -P ossrh），可登录 https://s01.oss.sonatype.org/ 验证。
-   > artifact 可能被发布在一个临时的 nexus 仓库（而不是 Central）,需要手动做一些操作,具体可参考 https://central.sonatype.org/publish/release/ 
+   > artifact 可能被发布在一个临时的 nexus 仓库（而不是 Central）,需要手动做一些操作,具体可参考 https://central.sonatype.org/publish/release/
+
+以上步骤完成后,半小时内同步到 central 仓库, 4小时后能在 https://search.maven.org 搜索
+
+> 验证是否同步到 central，可访问： https://repo1.maven.org/maven2/io/github/light0x00/mybatis-ext-parent/0.0.4/mybatis-ext-parent-0.0.4.pom
 
 发布指令
 
 - mvn versions:set -DnewVersion=0.0.3
 - mvn versions:revert 恢复之前版本
 - mvn versions:commit 提交当前版本（删除备份文件）
-- mvn clean deploy -P ossrh,release
+- mvn clean deploy -P ossrh,release 发布到临时仓库
+- mvn nexus-staging:release -P release 发布到 central 仓库
+
+> 9 Activate Central Sync
+> The first time you promote a release, you need to comment on the OSSRH JIRA ticket you created in Section 3 so we can know you are ready to be synced. We will review your promoted artifacts. If no problem found, we will activate Central Sync for you and close your JIRA ticket.
+> After Central Sync is activated, your future promotion will be synced automatically. The sync process runs roughly every 2 hours.
 
 最佳工程化实践
 
