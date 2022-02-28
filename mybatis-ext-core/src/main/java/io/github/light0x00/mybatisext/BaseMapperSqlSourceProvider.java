@@ -96,7 +96,8 @@ public class BaseMapperSqlSourceProvider {
         String sqlWhere = condition.getSqlWhere("");
         String sqlGroupBy = condition.getSqlGroupBy();
         String sqlHaving = condition.getSqlHaving("");
-        return script("select %s from %s %s %s %s", sqlColumns, tableName, sqlWhere, sqlGroupBy, sqlHaving);
+        String sqlOrderBy = condition.getSqlOrderBy();
+        return script("select %s from %s %s %s %s %s", sqlColumns, tableName, sqlWhere, sqlGroupBy, sqlHaving, sqlOrderBy);
     }
 
     public static String selectMaps(SelectCondition condition, ProviderContext context) {

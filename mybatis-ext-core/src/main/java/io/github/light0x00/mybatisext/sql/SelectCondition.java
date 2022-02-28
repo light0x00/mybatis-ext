@@ -66,8 +66,8 @@ public class SelectCondition extends WhereCondition<SelectCondition> {
         }
     }
 
-    public String getOrderByClause() {
-        return StringUtils.isBlank(orderByClause) ? "" : orderByClause;
+    public String getSqlOrderBy() {
+        return StringUtils.isBlank(orderByClause) ? "" : "order by " + orderByClause;
     }
 
     @Override

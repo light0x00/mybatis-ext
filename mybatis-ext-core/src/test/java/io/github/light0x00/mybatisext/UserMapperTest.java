@@ -125,29 +125,28 @@ public class UserMapperTest {
         userMapper.select(new SelectCondition()
                 .select("name", "email")
                 .where()
-                .eq("name", "light")
+                .gt("age", 20)
                 .or()
                 .like("email", "%gmail.com")
+                .orderByClause("age desc")
         );
     }
 
     @Test
     public void select2() {
         userMapper.select(new SelectCondition()
-                .select("name", "email")
+                .select("name", "email", "age")
                 .where()
                 .like("email", "%gmail.com")
                 .and()
-                .nested(cond -> {
-                    cond.eq("name", "light").or().gt("age", "18");
-                })
+                .nested(cond -> cond.eq("name", "light").or().gt("age", "18"))
         );
     }
 
     @Test
     public void selectMaps() {
         List<Map<String, Object>> maps = userMapper.selectMaps(new SelectCondition()
-                .select("age","count(1) as number")
+                .select("age", "count(1) as number")
                 .groupBy("age")
                 .having(h -> h.gt("age", 20))
                 .orderByClause("number desc")
