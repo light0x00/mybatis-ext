@@ -152,7 +152,7 @@ The others receive a `XXCondition` as parameter, to build complex sql.
   insert into test.user ( pk_id, name, age, email ) values( 1L, "light", 2, "light@foo.com" ) ON DUPLICATE KEY UPDATE name="light2"
   ```
 
-  ### Build Complex Sql Where Condition
+### Build Complex Sql Where Condition
 
 In the real world, The sql where condition could be very complex. The conjuction `and` and `or` may combine lots of
 nested conditions. The following demonstrate how to build an complex condition using `SelectCondition` . (It's same for
