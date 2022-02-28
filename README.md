@@ -37,11 +37,7 @@ List<User> lst=userMapper.select(new SelectCondition()
         .where()
         .like("email","%gmail.com")
         .and()
-        .nested(cond->{
-        cond.eq("name","light").or().gt("age","18");
-        })
-        );
-
+        .nested(cond->cond.eq("name","light").or().gt("age","18")));
 ```
 
 以上代码等价于
