@@ -1,25 +1,25 @@
 ![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.light0x00/mybatis-ext/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## What
+## 它可以做什么
 
-It provies a set of built-in CRUD operations,to simplify redundant template code development.
+提供了一套通用的单表 CRUD 操作，简化冗余的模版代码开发成本。相对于同类产品的特点是， 不越界，只做最核心的事，因此不制造任何新的概念，无需任何配置，心智负担小。
 
-The api to build sql is fluent, graceful. Under the hood,it uses AST(abstract syntax tree) and Visitor pattern to build
-sql source,which is also graceful.
+另外，用户接口层面，其用于生成 sql 的 api 流畅合理且优雅；实现层面，采用了 visitor 模式 + AST 方案，也很优雅。
 
-## Getting Started
+## 上手指南
+
+引入 mybatis-ext
 
 ```xml
 
 <dependency>
     <groupId>io.github.light0x00</groupId>
     <artifactId>mybatis-ext</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
 </dependency>
 ```
 
-Make your `mapper` extends `io.github.light0x00.mybatisext.BaseMapper`，and specify your `enitty` as the parameterized
-type.
+然后让你的 mapper 继承 `io.github.light0x00.mybatisext.BaseMapper`，并把范型参数指定为实体类。
 
 ```java
 public interface UserMapper extends BaseMapper<User> {
@@ -27,7 +27,7 @@ public interface UserMapper extends BaseMapper<User> {
 }
 ```
 
-So far,the parts of configuration is done. You are ready to use the CRUD operations provided by `BaseMapper`.
+至此,配置部分就完成了,可以写个查询试试~
 
 ```java
 List<User> lst=userMapper.select(new SelectCondition()
@@ -42,7 +42,7 @@ List<User> lst=userMapper.select(new SelectCondition()
 
 ```
 
-The aboving code is equivalent to:
+以上代码等价于
 
 ```sql
 select name, email
@@ -53,7 +53,7 @@ where email like '%gmail.com'
 
 ## API
 
-`BaseMapper` provides the following CRUD operations:
+BaseMapper 提供了如下 CRUD 操作:
 
 ### C
 
@@ -80,13 +80,13 @@ where email like '%gmail.com'
 - `int deleteById(Serializable id)`
 - `int delete(DeleteCondition condition)`
 
-## Condition to build sql
+## 构建条件
 
-Some of the api are easy to understand. they receive an `id` or `entity` as parameter.
+这些 CRUD 操作按接收参数的不同可分为两类，一类是接收 ID 或 实体类的,这类使用较为简单,就不多赘述。
 
-The others receive a `XXCondition` as parameter, to build complex sql.
+另一类则接收 XXCondition 对象，用于构建带有复杂条件的增删改查 sql, 使用方式如下:
 
-- SelectCondition，used to build `where condition`,and the columns to select.
+- SelectCondition，用于构建 where 条件，和 select 语句的 字段列表 部分（即将会支持 group by，having，order by，可能会支持 分页）
   ```java
   userMapper.select(new SelectCondition()
               .select("name", "email")
@@ -95,12 +95,12 @@ The others receive a `XXCondition` as parameter, to build complex sql.
               .or()
               .like("email", "%gmail.com"));
   ```
-  Equivalent to:
+  等价于:
   ```
   select name,email from test.user where name='light' or email like '%gmail.com'
   ```
 
-- UpdateCondition，used to build `where condition`, and the `set` part of update sql.
+- UpdateCondition，用于构建 where 条件，和 update 语句的 set 部分
   ```java
   userMapper.updateByCondition(new UpdateCondition()
                   .set("name", "Jack")
@@ -109,14 +109,13 @@ The others receive a `XXCondition` as parameter, to build complex sql.
                   .eq("pk_id", 1)
   );
   ```
-  Equivalent to:
+  等价于:
 
   ```sql
   update test.user set name='Jack',age=age+3 where pk_id=1
   ```
 
-  Also,you can use a entity to specify which column to be updated. The non-null property of an entity will effect
-  the `set` part of update sql.
+  你也可以用 `entity` 指定哪些列要被更新,对象的非空属性会被更新.
 
   ```java
   User user = new User();
@@ -125,16 +124,17 @@ The others receive a `XXCondition` as parameter, to build complex sql.
   userMapper.update(user, new UpdateCondition().eq("pk_id", 2));
   ```
 
-- DeleteCondition，used to build `where condition`
+
+- DeleteCondition，用于构建 where 条件
   ```java
   userMapper.delete(new DeleteCondition().in("name", "alice","bob"));
   ```
-  Equivalent to:
+  等价于:
   ```sql
   delete from user where name in ("alice","bob")
   ```
 
-- InsertCondition，at present, it only used to build sql synax `insert on duplicates` （Only supported by mysql ）
+- InsertCondition，目前用于构建 insert on duplicates 语句（mysql 独有）
   ```java
   User user = new User();
   user.setPkId(1L);
@@ -146,17 +146,16 @@ The others receive a `XXCondition` as parameter, to build complex sql.
               .updateValueOnDupKey("name", "light2")
   ```
 
-  Equivalent to:
+  等价于:
 
   ```sql
   insert into test.user ( pk_id, name, age, email ) values( 1L, "light", 2, "light@foo.com" ) ON DUPLICATE KEY UPDATE name="light2"
   ```
 
-  ### Build Complex Sql Where Condition
+### 构建复杂Where条件
 
-In the real world, The sql where condition could be very complex. The conjuction `and` and `or` may combine lots of
-nested conditions. The following demonstrate how to build an complex condition using `SelectCondition` . (It's same for
-both of `UpdateCondition` and `DeleteCondition`)
+真实世界里,我们的 sql 的 where 条件是可能很复杂的，由 and 和 or 连接的条件是可以嵌套的.如下演示了不同条件逻辑组合，是如何使用 `SelectCondition` 对象构建的(其他两个`UpdateCondition`
+和 `DeleteCondition`也是相同的用法):
 
 - c1 = v1 and c2 = v2
   ```java
