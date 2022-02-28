@@ -91,8 +91,9 @@ BaseMapper 提供了如下 CRUD 操作:
 - `T getById(Serializable id)`
 - `List<T> select(SelectCondition condition)`
 - `T selectOne(SelectCondition condition)`
-- `List<T> selectCount(SelectCondition condition)`
+- `long selectCount(SelectCondition condition)`
 - `Cursor<T> selectCursor(SelectCondition condition)`
+- `List<Map<String, Object>> selectMaps(SelectCondition condition)`
 
 ### U
 

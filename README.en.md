@@ -90,8 +90,9 @@ So far,the parts of configuration is done. You are ready to use the CRUD operati
 - `T getById(Serializable id)`
 - `List<T> select(SelectCondition condition)`
 - `T selectOne(SelectCondition condition)`
-- `List<T> selectCount(SelectCondition condition)`
+- `long selectCount(SelectCondition condition)`
 - `Cursor<T> selectCursor(SelectCondition condition)`
+- `List<Map<String, Object>> selectMaps(SelectCondition condition)`
 
 ### U
 
