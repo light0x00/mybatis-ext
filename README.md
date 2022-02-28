@@ -2,7 +2,7 @@
 
 ➡️ [English document](./README.en.md)
 
-## 它可以做什么
+## 介绍
 
 提供了一套通用的单表 CRUD 操作，简化冗余的模版代码开发。相对于同类产品的特点是， 不越界，只做最核心的事，因此不制造任何新的概念，无需任何配置，心智负担小。
 
@@ -17,7 +17,7 @@
 <dependency>
     <groupId>io.github.light0x00</groupId>
     <artifactId>mybatis-ext</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.7</version>
 </dependency>
 ```
 
@@ -27,27 +27,54 @@
 public interface UserMapper extends BaseMapper<User> {
 
 }
+
+@Data
+@TableName(schema = "test")
+public class User {
+    @Column(primary = true)
+    private Long pkId;
+    private String name;
+    private Integer age;
+    private String email;
+}
 ```
 
 至此,配置部分就完成了,可以写个查询试试~
 
-```java
-List<User> lst=userMapper.select(new SelectCondition()
-        .select("name","email")
-        .where()
-        .like("email","%gmail.com")
-        .and()
-        .nested(cond->cond.eq("name","light").or().gt("age","18")));
-```
+- 案例1
 
-以上代码等价于
+	```java
+	List<User> lst=userMapper.select(new SelectCondition()
+					.select("name","email")
+					.where()
+					.like("email","%gmail.com")
+					.and()
+					.nested(cond->cond.eq("name","light").or().gt("age","18")));
+	```
 
-```sql
-select name, email
-from test.user
-where email like '%gmail.com'
-  and (name = 'light' or age > 18)
-```
+	等价于
+
+	```sql
+	select name, email from test.user
+	where email like '%gmail.com' and (name = 'light' or age > 18)
+	```
+
+- 案例2
+
+	```java
+	List<Map<String, Object>> maps = userMapper.selectMaps(new SelectCondition()
+					.select("age", "count(1) as number")
+					.groupBy("age")
+					.having(cond -> cond.gt("age", 20))
+					.orderByClause("number desc")
+	);
+	```
+
+	等价于
+
+	```sql
+	select age,count(1) as number from test.user group by age having age>20 order by number desc
+	```
 
 ## API
 
@@ -84,18 +111,20 @@ BaseMapper 提供了如下 CRUD 操作:
 
 另一类则接收 XXCondition 对象，用于构建带有复杂条件的增删改查 sql, 使用方式如下:
 
-- SelectCondition，用于构建 where 条件，和 select 语句的 字段列表 部分（即将会支持 group by，having，order by，可能会支持 分页）
+- SelectCondition，用于构建 where 条件，要查询的列，分组聚合，排序
   ```java
-  userMapper.select(new SelectCondition()
-              .select("name", "email")
-              .where()
-              .eq("name", "light")
-              .or()
-              .like("email", "%gmail.com"));
+	userMapper.select(new SelectCondition()
+					.select("name", "email")
+					.where()
+					.gt("age", 20)
+					.or()
+					.like("email", "%gmail.com")
+					.orderByClause("age desc")
+	);
   ```
   等价于:
-  ```
-  select name,email from test.user where name='light' or email like '%gmail.com'
+  ```sql
+	select name,email from test.user where age>20 or email like '%gmail.com' order by age desc
   ```
 
 - UpdateCondition，用于构建 where 条件，和 update 语句的 set 部分

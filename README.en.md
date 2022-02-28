@@ -14,7 +14,7 @@ pattern to build sql source,which is also graceful.
 <dependency>
     <groupId>io.github.light0x00</groupId>
   <artifactId>mybatis-ext</artifactId>
-  <version>0.0.5</version>
+  <version>0.0.7</version>
 </dependency>
 ```
 
@@ -25,27 +25,55 @@ type.
 public interface UserMapper extends BaseMapper<User> {
 
 }
+
+@Data
+@TableName(schema = "test")
+public class User {
+    @Column(primary = true)
+    private Long pkId;
+    private String name;
+    private Integer age;
+    private String email;
+}
 ```
 
 So far,the parts of configuration is done. You are ready to use the CRUD operations provided by `BaseMapper`.
 
-```java
-List<User> lst=userMapper.select(new SelectCondition()
-        .select("name","email")
-        .where()
-        .like("email","%gmail.com")
-        .and()
-        .nested(cond->cond.eq("name","light").or().gt("age","18")));
-```
+- example 1
 
-The above is equivalent to:
+	```java
+	List<User> lst=userMapper.select(new SelectCondition()
+					.select("name","email")
+					.where()
+					.like("email","%gmail.com")
+					.and()
+					.nested(cond->cond.eq("name","light").or().gt("age","18")));
+	```
 
-```sql
-select name, email
-from test.user
-where email like '%gmail.com'
-  and (name = 'light' or age > 18)
-```
+	The above is equivalent to:
+
+	```sql
+	select name, email from test.user
+	where email like '%gmail.com' and (name = 'light' or age > 18)
+	```
+
+- example 2
+
+	```java
+	List<Map<String, Object>> maps = userMapper.selectMaps(new SelectCondition()
+					.select("age", "count(1) as number")
+					.groupBy("age")
+					.having(cond -> cond.gt("age", 20))
+					.orderByClause("number desc")
+	);
+	```
+
+	The above is equivalent to:
+
+	```sql
+	select age,count(1) as number from test.user group by age having age>20 order by number desc
+	```
+
 
 ## API
 
@@ -84,16 +112,18 @@ The others receive a `XXCondition` as parameter, to build complex sql.
 
 - SelectCondition，being used to build `where condition`,and the `columns` part of select sql.
   ```java
-  userMapper.select(new SelectCondition()
-              .select("name", "email")
-              .where()
-              .eq("name", "light")
-              .or()
-              .like("email", "%gmail.com"));
+	userMapper.select(new SelectCondition()
+					.select("name", "email")
+					.where()
+					.gt("age", 20)
+					.or()
+					.like("email", "%gmail.com")
+					.orderByClause("age desc")
+	);
   ```
   Equivalent to:
-  ```
-  select name,email from test.user where name='light' or email like '%gmail.com'
+  ```sql
+	select name,email from test.user where age>20 or email like '%gmail.com' order by age desc
   ```
 
 - UpdateCondition，being used to build `where condition`, and the `set` part of update sql.
