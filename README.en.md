@@ -18,7 +18,7 @@ pattern to build sql source,which is also graceful.
 </dependency>
 ```
 
-Make your `mapper` extends `io.github.light0x00.mybatisext.BaseMapper`，and specify your `enitty` as the parameterized
+Make your `mapper` extend `io.github.light0x00.mybatisext.BaseMapper`，and specify your `enitty` as the parameterized
 type.
 
 ```java
@@ -38,7 +38,7 @@ List<User> lst=userMapper.select(new SelectCondition()
         .nested(cond->cond.eq("name","light").or().gt("age","18")));
 ```
 
-The aboving code is equivalent to:
+The above is equivalent to:
 
 ```sql
 select name, email
@@ -82,7 +82,7 @@ Some of the api are easy to understand. they receive an `id` or `entity` as para
 
 The others receive a `XXCondition` as parameter, to build complex sql.
 
-- SelectCondition，used to build `where condition`,and the columns to select.
+- SelectCondition，being used to build `where condition`,and the `columns` part of select sql.
   ```java
   userMapper.select(new SelectCondition()
               .select("name", "email")
@@ -96,7 +96,7 @@ The others receive a `XXCondition` as parameter, to build complex sql.
   select name,email from test.user where name='light' or email like '%gmail.com'
   ```
 
-- UpdateCondition，used to build `where condition`, and the `set` part of update sql.
+- UpdateCondition，being used to build `where condition`, and the `set` part of update sql.
   ```java
   userMapper.updateByCondition(new UpdateCondition()
                   .set("name", "Jack")
@@ -121,7 +121,7 @@ The others receive a `XXCondition` as parameter, to build complex sql.
   userMapper.update(user, new UpdateCondition().eq("pk_id", 2));
   ```
 
-- DeleteCondition，used to build `where condition`
+- DeleteCondition，being used to build `where condition`
   ```java
   userMapper.delete(new DeleteCondition().in("name", "alice","bob"));
   ```
@@ -150,8 +150,8 @@ The others receive a `XXCondition` as parameter, to build complex sql.
 
 ### Build Complex Sql Where Condition
 
-In the real world, The sql where condition could be very complex. The conjuction `and` and `or` may combine lots of
-nested conditions. The following demonstrate how to build an complex condition using `SelectCondition` . (It's same for
+In the real world, The "sql where condition" could be very complex. The conjuction `and` and `or` may combine lots of
+nested conditions. The following demonstrate how to build a complex condition using `SelectCondition` . (It's same for
 both of `UpdateCondition` and `DeleteCondition`)
 
 - c1 = v1 and c2 = v2

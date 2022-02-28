@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author light
@@ -125,7 +127,8 @@ public class UserMapperTest {
                 .where()
                 .eq("name", "light")
                 .or()
-                .like("email", "%gmail.com"));
+                .like("email", "%gmail.com")
+        );
     }
 
     @Test
@@ -139,7 +142,16 @@ public class UserMapperTest {
                     cond.eq("name", "light").or().gt("age", "18");
                 })
         );
+    }
 
+    @Test
+    public void selectMaps() {
+        List<Map<String, Object>> maps = userMapper.selectMaps(new SelectCondition()
+                .select("age","count(1) as number")
+                .groupBy("age")
+                .having(h -> h.gt("age", 20))
+                .orderByClause("number desc")
+        );
     }
 
     @Test

@@ -1,1 +1,2 @@
-- [ ] 支持 ID 生成策略 
+- [ ] BaseMapperSqlSourceProvider 缓存 
+- [ ] 支持分页

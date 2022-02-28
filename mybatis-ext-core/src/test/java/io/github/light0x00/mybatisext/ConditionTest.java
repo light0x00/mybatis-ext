@@ -158,4 +158,13 @@ public class ConditionTest {
                 "(c5=#{conditionAst.children[2].children[2].children[0].value} or c6=#{conditionAst.children[2].children[2].children[2].value})" +
                 ")", sqlWhere6);
     }
+
+    @Test
+    public void groupByHaving() {
+        SelectCondition cond = new SelectCondition()
+                .groupBy("name", "age")
+                .having(h -> h.gt("age", 20));
+        System.out.println(cond.getSqlGroupBy());
+        System.out.println(cond.getSqlHaving(""));
+    }
 }

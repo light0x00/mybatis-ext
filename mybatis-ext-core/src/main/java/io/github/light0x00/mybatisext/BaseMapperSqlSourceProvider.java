@@ -91,10 +91,16 @@ public class BaseMapperSqlSourceProvider {
     }
 
     public static String select(SelectCondition condition, ProviderContext context) {
+        String tableName = TableInfoHolder.get(context.getMapperType()).getFullTableName();
         String sqlColumns = condition.getSqlColumns();
         String sqlWhere = condition.getSqlWhere("");
-        String tableName = TableInfoHolder.get(context.getMapperType()).getFullTableName();
-        return script("select %s from %s %s", sqlColumns, tableName, sqlWhere);
+        String sqlGroupBy = condition.getSqlGroupBy();
+        String sqlHaving = condition.getSqlHaving("");
+        return script("select %s from %s %s %s %s", sqlColumns, tableName, sqlWhere, sqlGroupBy, sqlHaving);
+    }
+
+    public static String selectMaps(SelectCondition condition, ProviderContext context) {
+        return select(condition, context);
     }
 
     public static String selectOne(SelectCondition condition, ProviderContext context) {
@@ -105,7 +111,6 @@ public class BaseMapperSqlSourceProvider {
         String tableName = TableInfoHolder.get(context.getMapperType()).getFullTableName();
         return script("select count(1) from %s %s", tableName, condition.getSqlWhere());
     }
-
 
     public static String selectCursor(SelectCondition condition, ProviderContext context) {
         return select(condition, context);

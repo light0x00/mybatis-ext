@@ -12,6 +12,7 @@ import org.apache.ibatis.cursor.Cursor;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author light
@@ -58,17 +59,16 @@ public interface BaseMapper<T> {
     @SelectProvider(type = BaseMapperSqlSourceProvider.class, method = "select")
     List<T> select(SelectCondition condition);
 
+    @SelectProvider(type = BaseMapperSqlSourceProvider.class, method = "selectMaps")
+    List<Map<String, Object>> selectMaps(SelectCondition condition);
+
     @SelectProvider(type = BaseMapperSqlSourceProvider.class, method = "selectOne")
     T selectOne(SelectCondition condition);
 
     @SelectProvider(type = BaseMapperSqlSourceProvider.class, method = "selectCount")
-    List<T> selectCount(SelectCondition condition);
+    long selectCount(SelectCondition condition);
 
     @SelectProvider(type = BaseMapperSqlSourceProvider.class, method = "selectCursor")
     Cursor<T> selectCursor(SelectCondition condition);
-
-//    @SelectProvider(type = BaseMapperSqlSourceProvider.class, method = "selectPage")
-//    List<T> selectPage(WhereCondition where);
-
 
 }
