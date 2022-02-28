@@ -13,8 +13,8 @@ pattern to build sql source,which is also graceful.
 
 <dependency>
     <groupId>io.github.light0x00</groupId>
-    <artifactId>mybatis-ext</artifactId>
-    <version>0.0.4</version>
+  <artifactId>mybatis-ext</artifactId>
+  <version>0.0.5</version>
 </dependency>
 ```
 
