@@ -37,4 +37,8 @@ public class SelectCondition extends WhereCondition<SelectCondition> {
         return getSqlWhere("");
     }
 
+    @Override
+    protected SelectCondition newNestedInstance() {
+        return new SelectCondition();
+    }
 }

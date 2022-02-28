@@ -64,7 +64,7 @@ public class UserMapperTest {
         userMapper.insertIgnore(user);
     }
 
-    //@Test
+    @Test
     public void insertOnDupKey() {
         User user = new User();
         user.setPkId(1L);
@@ -123,9 +123,23 @@ public class UserMapperTest {
         userMapper.select(new SelectCondition()
                 .select("name", "email")
                 .where()
-                .ne("pk_id", 1)
-                .eq("name", "Bob")
+                .eq("name", "light")
+                .or()
+                .like("email", "%gmail.com"));
+    }
+
+    @Test
+    public void select2() {
+        userMapper.select(new SelectCondition()
+                .select("name", "email")
+                .where()
+                .like("email", "%gmail.com")
+                .and()
+                .nested(cond -> {
+                    cond.eq("name", "light").or().gt("age", "18");
+                })
         );
+
     }
 
     @Test

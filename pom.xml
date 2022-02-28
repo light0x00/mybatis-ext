@@ -4,7 +4,7 @@
 
     <groupId>io.github.light0x00</groupId>
     <artifactId>mybatis-ext-parent</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
     <packaging>pom</packaging>
 
     <modules>

@@ -9,7 +9,7 @@ import java.util.function.Consumer;
  * @author light
  * @since 2022/2/20
  */
-class WhereCondition<R extends ConditionBuilder<R>> extends ConditionBuilder<R> {
+abstract class WhereCondition<R extends ConditionBuilder<R>> extends ConditionBuilder<R> {
 
     public String getSqlWhere(String paramSymbol) {
         String sqlCondition = getSqlCondition(paramSymbol);
@@ -28,4 +28,5 @@ class WhereCondition<R extends ConditionBuilder<R>> extends ConditionBuilder<R> 
         whereConditionConsumer.accept(this);
         return thisAsR();
     }
+
 }

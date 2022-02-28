@@ -42,4 +42,8 @@ public class UpdateCondition extends WhereCondition<UpdateCondition> {
         return this;
     }
 
+    @Override
+    protected UpdateCondition newNestedInstance() {
+        return new UpdateCondition();
+    }
 }

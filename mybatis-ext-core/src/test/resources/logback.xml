@@ -5,7 +5,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.light0x00" level="debug"/>
+    <logger name="io.github.light0x00" level="debug"/>
 
     <root level="info">
         <appender-ref ref="console"/>

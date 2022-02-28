@@ -17,7 +17,7 @@
 - mvn versions:set -DnewVersion=0.0.3
 - mvn versions:revert 恢复之前版本
 - mvn versions:commit 提交当前版本（删除备份文件）
-- mvn clean deploy -P ossrh,release 发布到临时仓库
+- export GPG_TTY=$(tty) && mvn clean deploy -P ossrh,release 发布到临时仓库
 - mvn nexus-staging:release -P release 发布到 central 仓库
 
 > 9 Activate Central Sync

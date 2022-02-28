@@ -15,13 +15,15 @@ import java.util.function.Consumer;
  * @author light
  * @since 2022/2/24
  */
-public class ConditionBuilder<R extends ConditionBuilder<R>> {
+public abstract class ConditionBuilder<R extends ConditionBuilder<R>> {
 
     @Getter
     protected Condition conditionAst;
     protected LinkedList<ASTNode> conditionNodes = new LinkedList<>();
 
     private ConditionSourceGenerator sqlGenerator = new ConditionSourceGenerator();
+
+    protected abstract R newNestedInstance();
 
     protected NestedCondition buildNestedCondition() {
         return new NestedCondition(conditionNodes);
@@ -155,7 +157,7 @@ public class ConditionBuilder<R extends ConditionBuilder<R>> {
     }
 
     private void nested0(Consumer<ConditionBuilder<R>> nestedConditionConsumer) {
-        ConditionBuilder<R> nestedBuilder = new ConditionBuilder<>();
+        ConditionBuilder<R> nestedBuilder = newNestedInstance();
         nestedConditionConsumer.accept(nestedBuilder);
         conditionNodes.addLast(nestedBuilder.buildNestedCondition());
     }
