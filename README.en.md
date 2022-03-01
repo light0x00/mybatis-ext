@@ -18,14 +18,16 @@ pattern to build sql source,which is also graceful.
 </dependency>
 ```
 
-Make your `mapper` extend `io.github.light0x00.mybatisext.BaseMapper`，and specify your `enitty` as the parameterized
-type.
+Make your `mapper` extend `io.github.light0x00.mybatisext.BaseMapper`，and specify your `entity` as the generic
+parameterized type.
 
 ```java
 public interface UserMapper extends BaseMapper<User> {
 
 }
+```
 
+```java
 @Data
 @TableName(schema = "test")
 public class User {
@@ -37,43 +39,66 @@ public class User {
 }
 ```
 
-So far,the parts of configuration is done. You are ready to use the CRUD operations provided by `BaseMapper`.
+So far,the preparation is done. You are ready to use the CRUD operations provided by `BaseMapper`.
 
-- example 1
+### Example 1,general query
 
-	```java
-	List<User> lst=userMapper.select(new SelectCondition()
-					.select("name","email")
-					.where()
-					.like("email","%gmail.com")
-					.and()
-					.nested(cond->cond.eq("name","light").or().gt("age","18")));
-	```
+```java
+List<User> lst=userMapper.select(new SelectCondition()
+				.where()
+				.like("email","%gmail.com")
+				.and()
+				.nested(cond->cond.eq("name","light").or().gt("age","18")));
+```
 
-	The above is equivalent to:
+Equivalent to:
 
-	```sql
-	select name, email from test.user
-	where email like '%gmail.com' and (name = 'light' or age > 18)
-	```
+```sql
+select * from test.user where email like '%gmail.com' and (name = 'light' or age > 18)
+```
 
-- example 2
+### Example 2,grouping and aggregation
 
-	```java
-	List<Map<String, Object>> maps = userMapper.selectMaps(new SelectCondition()
-					.select("age", "count(1) as number")
-					.groupBy("age")
-					.having(cond -> cond.gt("age", 20))
-					.orderByClause("number desc")
-	);
-	```
+```java
+List<Map<String, Object>> maps = userMapper.selectMaps(new SelectCondition()
+				.select("age", "count(1) as number")
+				.groupBy("age")
+				.having(cond -> cond.gt("age", 20))
+				.orderByClause("number desc")
+);
+```
 
-	The above is equivalent to:
+Equivalent to:
 
-	```sql
-	select age,count(1) as number from test.user group by age having age>20 order by number desc
-	```
+```sql
+select age,count(1) as number from test.user group by age having age>20 order by number desc
+```
 
+### Example 3,cursor
+
+```java
+try (Cursor<User> cursor = userMapper.selectCursor(new SelectCondition().gt("age", 1))) {
+	cursor.forEach(System.out::println);
+} catch (IOException e) {
+	e.printStackTrace();
+}
+```
+
+### Example 4,increment and decrement
+
+```java
+userMapper.updateByCondition(new UpdateCondition()
+        .incr("age", 3)
+        .where()
+        .eq("pk_id", 1)
+);
+```
+
+TEquivalent to:
+
+```sql
+update test.user set age=age+3 where pk_id=1
+```
 
 ## API
 

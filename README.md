@@ -27,7 +27,9 @@
 public interface UserMapper extends BaseMapper<User> {
 
 }
+```
 
+```
 @Data
 @TableName(schema = "test")
 public class User {
@@ -39,42 +41,75 @@ public class User {
 }
 ```
 
-至此,配置部分就完成了,可以写个查询试试~
+至此,准备工作就完成了,可以写个查询试试~
 
-- 案例1
+### 案例1,常规查询
 
-	```java
-	List<User> lst=userMapper.select(new SelectCondition()
-					.select("name","email")
-					.where()
-					.like("email","%gmail.com")
-					.and()
-					.nested(cond->cond.eq("name","light").or().gt("age","18")));
-	```
+```java
+List<User> lst=userMapper.select(new SelectCondition()
+        .where()
+        .like("email","%gmail.com")
+        .and()
+        .nested(cond->cond.eq("name","light").or().gt("age","18")));
+```
 
-	等价于
+等价于
 
-	```sql
-	select name, email from test.user
-	where email like '%gmail.com' and (name = 'light' or age > 18)
-	```
+```sql
+select *
+from test.user
+where email like '%gmail.com'
+  and (name = 'light' or age > 18)
+```
 
-- 案例2
+### 案例2,分组聚合
 
-	```java
-	List<Map<String, Object>> maps = userMapper.selectMaps(new SelectCondition()
-					.select("age", "count(1) as number")
-					.groupBy("age")
-					.having(cond -> cond.gt("age", 20))
-					.orderByClause("number desc")
-	);
-	```
+```java
+List<Map<String, Object>>maps=userMapper.selectMaps(new SelectCondition()
+        .select("age","count(1) as number")
+        .groupBy("age")
+        .having(cond->cond.gt("age",20))
+        .orderByClause("number desc")
+        );
+```
 
-	等价于
+等价于:
 
-	```sql
-	select age,count(1) as number from test.user group by age having age>20 order by number desc
-	```
+```sql
+select age, count(1) as number
+from test.user
+group by age
+having age > 20
+order by number desc
+```
+
+### 案例3,游标
+
+```java
+try(Cursor<User> cursor=userMapper.selectCursor(new SelectCondition().gt("age",1))){
+        cursor.forEach(System.out::println);
+        }catch(IOException e){
+        e.printStackTrace();
+        }
+```
+
+### 案例4,自增
+
+```java
+userMapper.updateByCondition(new UpdateCondition()
+        .incr("age",3)
+        .where()
+        .eq("pk_id",1)
+        );
+```
+
+等价于:
+
+```sql
+update test.user
+set age=age + 3
+where pk_id = 1
+```
 
 ## API
 
