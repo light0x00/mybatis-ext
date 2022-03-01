@@ -66,7 +66,7 @@ public class UserMapperTest {
         userMapper.insertIgnore(user);
     }
 
-    @Test
+    //@Test
     public void insertOnDupKey() {
         User user = new User();
         user.setPkId(1L);
@@ -108,7 +108,6 @@ public class UserMapperTest {
     @Test
     public void updateByCondition() {
         userMapper.updateByCondition(new UpdateCondition()
-                .set("name", "Jack")
                 .incr("age", 3)
                 .where()
                 .eq("pk_id", 1)
@@ -169,7 +168,7 @@ public class UserMapperTest {
 
     @Test
     public void selectCursor() {
-        try (Cursor<User> cursor = userMapper.selectCursor(new SelectCondition().ne("pk_id", 1))) {
+        try (Cursor<User> cursor = userMapper.selectCursor(new SelectCondition().gt("age", 1))) {
             cursor.forEach(System.out::println);
         } catch (IOException e) {
             e.printStackTrace();

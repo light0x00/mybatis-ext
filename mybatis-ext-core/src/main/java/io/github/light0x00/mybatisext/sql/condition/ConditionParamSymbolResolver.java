@@ -17,8 +17,8 @@ public class ConditionParamSymbolResolver extends ConditionAstVisitor<Void> {
     public ConditionParamSymbolResolver(String rootParamSymbol) {
         if (StringUtils.isBlank(rootParamSymbol)) {
             rootParamSymbol = "";
-        } else if (rootParamSymbol.lastIndexOf(0) == '.') {
-            rootParamSymbol = rootParamSymbol.substring(0, rootParamSymbol.length() - 1);
+        } else {
+            rootParamSymbol = StringUtils.trimTailDot(rootParamSymbol);
         }
         stack.push(rootParamSymbol);
     }
