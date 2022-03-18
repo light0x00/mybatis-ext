@@ -4,7 +4,7 @@
 
     <groupId>io.github.light0x00</groupId>
     <artifactId>mybatis-ext-parent</artifactId>
-    <version>0.0.7</version>
+    <version>0.0.8</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -79,7 +79,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.30</version>
+            <version>1.7.32</version>
         </dependency>
     </dependencies>
 

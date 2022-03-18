@@ -10,6 +10,8 @@
 
 ## 上手指南
 
+> ⚠️ mybatis版本需 >= 3.5.1 https://github.com/mybatis/mybatis-3/releases/tag/mybatis-3.5.1
+
 引入 mybatis-ext
 
 ```xml

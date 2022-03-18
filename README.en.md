@@ -9,6 +9,8 @@ pattern to build sql source,which is also graceful.
 
 ## Getting Started
 
+> ⚠️ It's required that mybatis version >= 3.5.1 https://github.com/mybatis/mybatis-3/releases/tag/mybatis-3.5.1
+
 ```xml
 
 <dependency>
