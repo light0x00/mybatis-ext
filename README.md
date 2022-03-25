@@ -31,15 +31,16 @@ public interface UserMapper extends BaseMapper<User> {
 }
 ```
 
-```
+```java
+
 @Data
 @TableName(schema = "test")
 public class User {
-    @Column(primary = true)
-    private Long pkId;
-    private String name;
-    private Integer age;
-    private String email;
+  @Column(primary = true)
+  private Long pkId;
+  private String name;
+  private Integer age;
+  private String email;
 }
 ```
 
