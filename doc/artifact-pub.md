@@ -35,3 +35,32 @@
 7. Update versions to next snapshot version
 8. Commit new snapshot version
 9. Develop, develop, develop and rinse and repeat
+
+
+setting.xml
+
+```xml
+<!-- 上传jar包配置 -->
+<profiles>
+    <profile>
+        <id>ossrh</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <!--事先用 gpg 生成密钥-->
+        <properties>
+            <gpg.keyname>0x9A3EDB42</gpg.keyname>
+            <gpg.executable>gpg</gpg.executable>
+            <gpg.passphrase><![CDATA[密钥]]></gpg.passphrase>
+        </properties>
+    </profile>
+</profiles>
+<servers>
+    <!--事先在中央仓库注册账号-->
+    <server>
+        <id>ossrh</id>
+        <username>light0x00</username>
+        <password><![CDATA[中央仓库账号密码]]></password>
+    </server>
+</servers>
+```

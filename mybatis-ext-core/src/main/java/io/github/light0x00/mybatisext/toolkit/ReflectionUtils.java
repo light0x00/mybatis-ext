@@ -1,5 +1,7 @@
 package io.github.light0x00.mybatisext.toolkit;
 
+import java.lang.invoke.SerializedLambda;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
