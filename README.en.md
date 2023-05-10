@@ -1,5 +1,7 @@
 ![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.light0x00/mybatis-ext/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+[中文](./README.md) | English
+
 ## What
 
 It provies a set of built-in CRUD operations,to simplify redundant template code development.
