@@ -1,8 +1,7 @@
 ![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.light0x00/mybatis-ext/badge.svg) 
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-➡️ [English document](./README.en.md)
+[English](./README.en.md) | 中文
 
 ## 介绍
 
