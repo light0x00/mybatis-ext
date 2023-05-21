@@ -4,7 +4,7 @@
 
 ## What
 
-It provies a set of built-in CRUD operations,to simplify redundant boilerplate code development.
+It provies a set of built-in CRUD operations,to eliminates redundant boilerplate code development.
 
 The api it exports for building sql is fluent, graceful. Under the hood,it uses AST(abstract syntax tree) and Visitor
 pattern to build sql source,which is also graceful.
